@@ -1,0 +1,19 @@
+<div id="rating-box" data-url="/movies/{{ movie.id }}/rate/">
+    <div class="d-flex flex-wrap align-items-center gap-3 mb-2">
+        <div class="stars" role="group" aria-label="Ваша оценка от 1 до 10">
+            {% for n in stars %}
+                <button type="button" class="star {% if n <= my_score|default:0 %}active{% endif %}"
+                        data-score="{{ n }}" title="{{ n }} из 10" aria-label="Оценка {{ n }}">★</button>
+            {% endfor %}
+        </div>
+        <div id="my-score-text">
+            {% if my_score %}Ваша оценка: <strong>{{ my_score }}</strong> из 10{% else %}Вы ещё не оценили этот фильм{% endif %}
+        </div>
+    </div>
+    <div class="text-secondary">
+        Оценка пользователей:
+        <strong id="avg-score">{% if avg_score %}{{ avg_score|floatformat:1 }}{% else %}—{% endif %}</strong>
+        (оценок: <span id="ratings-count">{{ ratings_count }}</span>).
+        Нажмите на ту же звезду ещё раз, чтобы убрать оценку.
+    </div>
+</div>

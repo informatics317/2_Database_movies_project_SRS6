@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Каталог{% endblock %}
+
+{% block header %}
+<div class="row align-items-center g-2">
+    <div class="col">
+        <div class="page-pretitle">Фильмотека</div>
+        <h2 class="page-title">Каталог фильмов</h2>
+    </div>
+    <div class="col-auto d-flex gap-2">
+        <a href="/search/" class="btn btn-icon btn-outline-primary"
+           title="Расширенный поиск" aria-label="Расширенный поиск">
+            {% include 'components/filter_icon.html' %}
+        </a>
+        <div class="btn-group" role="group" aria-label="Вид списка">
+            <button type="button" class="btn btn-outline-primary active" data-view="grid">Сетка</button>
+            <button type="button" class="btn btn-outline-primary" data-view="list">Список</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="catalog-root" data-partial-url="/movies/partial/" data-kind="">
+
+    {% include 'components/filter_bar.html' %}
+
+    <div class="text-secondary mb-3">
+        Найдено фильмов: <strong id="results-count">{{ movies|length }}</strong> из <span id="total-count">{{ total }}</span>
+    </div>
+
+    <div class="row row-cards view-grid" id="movie-grid">
+        {% include 'components/movie_grid.html' %}
+    </div>
+</div>
+{% endblock %}

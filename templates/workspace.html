@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block title %}Подбор и сравнение{% endblock %}
+
+{% block header %}
+<div class="page-pretitle">Фильмотека</div>
+<h2 class="page-title">Подбор и сравнение</h2>
+{% endblock %}
+
+{% block content %}
+<div id="workspace-root">
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3 class="card-title">Что посмотреть вечером?</h3>
+        </div>
+        <div class="card-body">
+            <div class="row g-2 align-items-end">
+                <div class="col-6 col-lg-3">
+                    <label class="form-label" for="ws-genre">Жанр</label>
+                    <select class="form-select" id="ws-genre">
+                        <option value="">Любой жанр</option>
+                    </select>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <label class="form-label" for="ws-duration">Длительность</label>
+                    <select class="form-select" id="ws-duration">
+                        <option value="">Любая</option>
+                        <option value="100">до 100 мин</option>
+                        <option value="120">до 120 мин</option>
+                        <option value="150">до 150 мин</option>
+                    </select>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <label class="form-label" for="ws-rating">Рейтинг</label>
+                    <select class="form-select" id="ws-rating">
+                        <option value="">Любой</option>
+                        <option value="7">от 7</option>
+                        <option value="8">от 8</option>
+                        <option value="8.5">от 8.5</option>
+                    </select>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <label class="form-label" for="ws-ordering">Сортировка</label>
+                    <select class="form-select" id="ws-ordering">
+                        <option value="-rating">Сначала лучшие</option>
+                        <option value="-year">Сначала новые</option>
+                        <option value="duration">Сначала короткие</option>
+                        <option value="title">По названию (А–Я)</option>
+                    </select>
+                </div>
+                <div class="col-12 col-lg-2">
+                    <button type="button" class="btn btn-outline-secondary w-100" id="ws-reset">Сбросить</button>
+                </div>
+            </div>
+            <label class="form-check mt-3 mb-0">
+                <input class="form-check-input" type="checkbox" id="ws-hide">
+                <span class="form-check-label">Не показывать фильмы, которые я уже посмотрел</span>
+            </label>
+        </div>
+    </div>
+
+    <div class="row g-3">
+
+        <div class="col-12 col-lg-5">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3 class="mb-0">Подходящие фильмы</h3>
+                <span class="text-secondary">Найдено: <strong id="ws-count">0</strong></span>
+            </div>
+
+
+            <div id="ws-list"></div>
+
+            <div class="d-flex justify-content-between align-items-center mt-3" id="ws-pager">
+                <button type="button" class="btn btn-outline-primary" id="ws-prev">← Назад</button>
+                <span class="text-secondary" id="ws-page-info">Страница 1 из 1</span>
+                <button type="button" class="btn btn-primary" id="ws-next">Другие варианты →</button>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-7">
+            <h3>Сравнение двух фильмов</h3>
+            <div class="row g-3">
+
+                <div class="col-12 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header"><h4 class="card-title">Фильм A</h4></div>
+                        <div class="card-body">
+                            <div class="ws-search-box mb-3">
+                                <input type="search" class="form-control" id="slot-a-input"
+                                       placeholder="Найти фильм по названию" autocomplete="off">
+                                <div class="ws-suggest" id="slot-a-suggest"></div>
+                            </div>
+                            <div id="slot-a-body"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header"><h4 class="card-title">Фильм B</h4></div>
+                        <div class="card-body">
+                            <div class="ws-search-box mb-3">
+                                <input type="search" class="form-control" id="slot-b-input"
+                                       placeholder="Найти фильм по названию" autocomplete="off">
+                                <div class="ws-suggest" id="slot-b-suggest"></div>
+                            </div>
+                            <div id="slot-b-body"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-3" id="ws-compare"></div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/workspace.js' %}"></script>
+{% endblock %}
+

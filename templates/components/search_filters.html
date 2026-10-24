@@ -1,0 +1,68 @@
+<div class="card mb-3" id="search-filters">
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+            <div class="fw-bold">Жанры</div>
+            <div class="d-flex align-items-center gap-2">
+                <label class="form-label mb-0" for="genre-mode">Искать:</label>
+                <select class="form-select form-select-sm w-auto" id="genre-mode">
+                    <option value="any">любой из выбранных</option>
+                    <option value="all">все выбранные сразу</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-selectgroup mb-4">
+            {% for genre in genres %}
+                <label class="form-selectgroup-item">
+                    <input type="checkbox" value="{{ genre.id }}" class="form-selectgroup-input genre-check">
+                    <span class="form-selectgroup-label">{{ genre.name }} <span class="text-secondary">{{ genre.n }}</span></span>
+                </label>
+            {% endfor %}
+        </div>
+
+        <div class="fw-bold mb-2">Страны</div>
+        <div class="form-selectgroup mb-4">
+            {% for c in countries %}
+                <label class="form-selectgroup-item">
+                    <input type="checkbox" value="{{ c.country }}" class="form-selectgroup-input country-check">
+                    <span class="form-selectgroup-label">{{ c.country }} <span class="text-secondary">{{ c.n }}</span></span>
+                </label>
+            {% empty %}
+                <span class="text-secondary">Страны пока не указаны.</span>
+            {% endfor %}
+        </div>
+
+        <div class="row g-3">
+            <div class="col-6 col-md-3 col-lg-2">
+                <label class="form-label" for="year-from">Год от</label>
+                <input type="number" class="form-control" id="year-from" placeholder="{{ year_min }}">
+            </div>
+            <div class="col-6 col-md-3 col-lg-2">
+                <label class="form-label" for="year-to">Год до</label>
+                <input type="number" class="form-control" id="year-to" placeholder="{{ year_max }}">
+            </div>
+            <div class="col-6 col-md-3 col-lg-3">
+                <label class="form-label" for="rating-min">Рейтинг</label>
+                <select class="form-select" id="rating-min">
+                    <option value="">Любой</option>
+                    <option value="5">не ниже 5</option>
+                    <option value="6">не ниже 6</option>
+                    <option value="7">не ниже 7</option>
+                    <option value="8">не ниже 8</option>
+                    <option value="9">не ниже 9</option>
+                </select>
+            </div>
+            <div class="col-6 col-md-3 col-lg-3">
+                <label class="form-label" for="duration">Длительность</label>
+                <select class="form-select" id="duration">
+                    <option value="">Любая</option>
+                    <option value="short">Короткие (до 100 мин)</option>
+                    <option value="medium">Средние (100–150 мин)</option>
+                    <option value="long">Длинные (больше 150 мин)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="text-secondary small mt-3">Выбрано условий: <strong id="filters-selected">0</strong></div>
+    </div>
+</div>

@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block title %}{{ movie.title }}{% endblock %}
+
+{% block header %}
+<div class="row align-items-center g-2">
+    <div class="col-12 col-md">
+        <div class="page-pretitle"><a href="/">← Назад в каталог</a></div>
+        <h2 class="page-title">{{ movie.title }}</h2>
+    </div>
+    {% if user.is_staff %}
+    <div class="col-12 col-md-auto d-flex gap-2">
+        <a class="btn btn-outline-secondary" href="/admin/accounts/movie/{{ movie.id }}/change/">Редактировать</a>
+        <button type="button" class="btn btn-outline-danger"
+                data-delete-movie="{{ movie.id }}"
+                data-url="/movies/{{ movie.id }}/delete/"
+                data-title="{{ movie.title }}"
+                data-redirect="/">Удалить фильм</button>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row row-cards">
+
+    <div class="col-12 col-md-4 col-lg-3">
+        <div class="card">
+            {% include 'components/poster.html' with movie=movie extra_class='poster-lg' %}
+        </div>
+    </div>
+
+    <div class="col-12 col-md-8 col-lg-9">
+        <div class="card">
+            <div class="card-body">
+                {% if movie.original_title %}
+                    <div class="text-secondary mb-3">{{ movie.original_title }}</div>
+                {% endif %}
+
+                <div class="mb-3">
+                    {% for genre in movie.genres.all %}
+                        <span class="badge bg-blue-lt me-1">{{ genre.name }}</span>
+                    {% endfor %}
+                </div>
+
+                <dl class="row mb-3">
+                    <dt class="col-5 col-sm-3">Год</dt>
+                    <dd class="col-7 col-sm-9">{{ movie.year }}</dd>
+                    {% if movie.country %}
+                    <dt class="col-5 col-sm-3">Страна</dt>
+                    <dd class="col-7 col-sm-9">{{ movie.country }}</dd>
+                    {% endif %}
+                    <dt class="col-5 col-sm-3">Режиссёр</dt>
+                    <dd class="col-7 col-sm-9">{{ movie.director }}</dd>
+                    <dt class="col-5 col-sm-3">Длительность</dt>
+                    <dd class="col-7 col-sm-9">{{ movie.duration }} мин</dd>
+                    <dt class="col-5 col-sm-3">Рейтинг</dt>
+                    <dd class="col-7 col-sm-9"><span class="badge bg-yellow-lt">★ {{ movie.rating }}</span></dd>
+                </dl>
+
+                <p>{{ movie.description|default:"Описание пока не добавлено." }}</p>
+
+                <div class="d-flex flex-wrap gap-2">
+                    {% include 'components/mark_buttons.html' with movie=movie with_label=True %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header"><h3 class="card-title">Оценка фильма</h3></div>
+            <div class="card-body">
+                {% include 'components/rating_picker.html' %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-7">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Отзывы (<span id="reviews-count">{{ reviews_count }}</span>)</h3>
+            </div>
+            <div class="list-group list-group-flush" id="reviews-list">
+                {% for review in reviews %}
+                    {% include 'components/review_item.html' %}
+                {% endfor %}
+            </div>
+            <div class="card-body text-secondary {% if reviews_count %}d-none{% endif %}" id="no-reviews">
+                Отзывов пока нет. Будьте первым!
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+        <div class="card">
+            <div class="card-header"><h3 class="card-title">Оставить отзыв</h3></div>
+            <div class="card-body">
+                <form id="review-form" action="/movies/{{ movie.id }}/reviews/add/" method="post" novalidate>
+                    {% csrf_token %}
+                    <div id="review-errors" class="alert alert-danger d-none" role="alert"></div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.text.id_for_label }}">{{ form.text.label }}</label>
+                        {{ form.text }}
+                        <div class="form-hint mt-1">Отзыв пишется как {{ user.username }}. Оценку можно поставить отдельно, без отзыва.</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Отправить отзыв</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

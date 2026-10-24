@@ -1,0 +1,25 @@
+<div class="card">
+    <div class="card-header"><h3 class="card-title">{{ title }}</h3></div>
+    <div class="card-body">
+        <div id="{{ chart_id }}"></div>
+        {% if hint %}<div class="text-secondary small mt-2">{{ hint }}</div>{% endif %}
+    </div>
+</div>
+<script>
+    new ApexCharts(document.getElementById('{{ chart_id }}'), {
+        chart: { type: 'bar', height: 300, toolbar: { show: false }, fontFamily: 'inherit' },
+        series: [{ name: '{{ series_name }}', data: [{% for n in values %}{{ n }}{% if not forloop.last %}, {% endif %}{% endfor %}] }],
+        xaxis: {
+            categories: [{% for l in labels %}'{{ l }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+            title: { text: 'Оценка' }
+        },
+        yaxis: {
+            title: { text: 'Сколько раз поставили' },
+            labels: { formatter: function (value) { return Math.round(value); } }
+        },
+        plotOptions: { bar: { borderRadius: 3, columnWidth: '60%' } },
+        dataLabels: { enabled: false },
+        colors: ['#206bc4'],
+        grid: { strokeDashArray: 4 }
+    }).render();
+</script>

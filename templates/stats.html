@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Статистика{% endblock %}
+
+{% block header %}
+<div class="page-pretitle">Фильмотека</div>
+<h2 class="page-title">Статистика</h2>
+{% endblock %}
+
+{% block content %}
+<script src="{% static 'vendor/tabler/libs/apexcharts/apexcharts.min.js' %}"></script>
+
+<div class="row row-cards mb-3">
+    {% include 'components/stat_card.html' with title='Фильмов в каталоге' value=total_movies %}
+    {% include 'components/stat_card.html' with title='Средний рейтинг' value=avg_rating|floatformat:1 hint='по всем фильмам' %}
+    {% include 'components/stat_card.html' with title='Оценок пользователей' value=ratings_total %}
+    {% include 'components/stat_card.html' with title='Отзывов' value=reviews_total %}
+</div>
+
+<div class="row row-cards mb-3">
+    <div class="col-12">
+        {% include 'components/bar_chart.html' with chart_id='scores-chart' title='Какие оценки ставят чаще всего' labels=score_labels values=score_numbers series_name='Оценок' hint=chart_hint %}
+    </div>
+</div>
+
+<div class="row row-cards">
+    <div class="col-12 col-lg-6">
+        <div class="card">
+            <div class="card-header"><h3 class="card-title">Фильмы по жанрам</h3></div>
+            <div class="card-body">
+                {% for g in genre_stats %}
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>{{ g.name }}</span>
+                            <span class="text-secondary">{{ g.n }} ({{ g.percent }}%)</span>
+                        </div>
+                        <div class="progress progress-sm">
+                            <div class="progress-bar" style="width: {{ g.percent }}%" role="progressbar"
+                                 aria-valuenow="{{ g.percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                {% empty %}
+                    {% include 'components/empty_state.html' with title='Данных пока нет' text='Запустите seed_movies.' %}
+                {% endfor %}
+                <div class="text-secondary small">У фильма может быть несколько жанров, поэтому проценты в сумме больше 100.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+        <div class="card">
+            <div class="card-header"><h3 class="card-title">Топ-5 по рейтингу</h3></div>
+            <div class="table-responsive">
+                <table class="table card-table table-vcenter">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Фильм</th>
+                            <th class="d-none d-sm-table-cell">Год</th>
+                            <th class="d-none d-md-table-cell">Режиссёр</th>
+                            <th>Рейтинг</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for movie in top_movies %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="/movies/{{ movie.id }}/">{{ movie.title }}</a></td>
+                            <td class="d-none d-sm-table-cell">{{ movie.year }}</td>
+                            <td class="d-none d-md-table-cell">{{ movie.director }}</td>
+                            <td><span class="badge bg-yellow-lt">★ {{ movie.rating }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

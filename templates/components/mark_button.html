@@ -1,0 +1,9 @@
+<button type="button"
+        class="btn btn-sm {% if active %}btn-{{ color }}{% else %}btn-outline-{{ color }}{% endif %}"
+        data-mark="{{ kind }}"
+        data-movie="{{ movie.id }}"
+        data-url="/movies/{{ movie.id }}/mark/{{ kind }}/"
+        data-color="{{ color }}"
+        title="{{ label }}" aria-label="{{ label }}">
+    {{ icon }}{% if with_label %} {{ label }}{% endif %}
+</button>

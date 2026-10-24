@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% block title %}Добавить фильм{% endblock %}
+
+{% block header %}
+<div class="page-pretitle"><a href="/">← Назад в каталог</a></div>
+<h2 class="page-title">Добавить фильм</h2>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                        <div class="alert alert-danger" role="alert">Проверьте поля формы: есть ошибки.</div>
+                    {% endif %}
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+                            {{ form.title }}
+                            {% for e in form.title.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="{{ form.original_title.id_for_label }}">{{ form.original_title.label }}</label>
+                            {{ form.original_title }}
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="form-label" for="{{ form.year.id_for_label }}">{{ form.year.label }}</label>
+                            {{ form.year }}
+                            {% for e in form.year.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="form-label" for="{{ form.country.id_for_label }}">{{ form.country.label }}</label>
+                            {{ form.country }}
+                            <datalist id="countries-list">
+                                {% for c in countries %}<option value="{{ c }}">{% endfor %}
+                            </datalist>
+                            {% for e in form.country.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="form-label" for="{{ form.duration.id_for_label }}">{{ form.duration.label }}</label>
+                            {{ form.duration }}
+                            {% for e in form.duration.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="form-label" for="{{ form.rating.id_for_label }}">{{ form.rating.label }}</label>
+                            {{ form.rating }}
+                            {% for e in form.rating.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="{{ form.director.id_for_label }}">{{ form.director.label }}</label>
+                            {{ form.director }}
+                            {% for e in form.director.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">{{ form.genres.label }}</label>
+                            <div class="form-selectgroup">
+                                {% for g in form.genres %}
+                                    <label class="form-selectgroup-item">
+                                        <input type="checkbox" name="genres" value="{{ g.data.value }}"
+                                               class="form-selectgroup-input" {% if g.data.selected %}checked{% endif %}>
+                                        <span class="form-selectgroup-label">{{ g.choice_label }}</span>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                            {% for e in form.genres.errors %}<div class="text-danger small mt-1">{{ e }}</div>{% endfor %}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                            {{ form.description }}
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label" for="{{ form.poster.id_for_label }}">{{ form.poster.label }}</label>
+                            <div class="row g-3 align-items-start">
+                                <div class="col-5 col-sm-4 col-md-3">
+                                    <div id="poster-preview" class="poster poster-preview" role="img" aria-label="Предпросмотр обложки">
+                                        <span class="poster-title text-center w-100" id="poster-preview-text">Здесь появится обложка</span>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-sm-8 col-md-9">
+                                    {{ form.poster }}
+                                    {% for e in form.poster.errors %}<div class="text-danger small mt-1">{{ e }}</div>{% endfor %}
+                                    <div class="form-hint mt-1">JPG, PNG или WEBP, до 5 МБ. Без обложки на карточке будет цветная заглушка.</div>
+
+                                    <label class="form-label mt-3" for="{{ form.poster_url.id_for_label }}">{{ form.poster_url.label }}</label>
+                                    {{ form.poster_url }}
+                                    {% for e in form.poster_url.errors %}<div class="text-danger small mt-1">{{ e }}</div>{% endfor %}
+                                    <div class="form-hint mt-1">Если выбран файл, ссылка не используется.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Добавить в каталог</button>
+                        <a href="/" class="btn btn-outline-secondary">Отмена</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Предпросмотр обложки: показываем выбранную картинку (или ссылку) в окошке
+    (function () {
+        const fileInput = document.getElementById('{{ form.poster.id_for_label }}');
+        const urlInput = document.getElementById('{{ form.poster_url.id_for_label }}');
+        const preview = document.getElementById('poster-preview');
+        const previewText = document.getElementById('poster-preview-text');
+
+        function show(src) {
+            if (src) {
+                preview.style.backgroundImage = "url('" + src + "')";
+                previewText.classList.add('d-none');
+            } else {
+                preview.style.backgroundImage = '';
+                previewText.classList.remove('d-none');
+            }
+        }
+
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            show(file ? URL.createObjectURL(file) : urlInput.value.trim());
+        });
+        urlInput.addEventListener('input', () => {
+            if (!fileInput.files[0]) show(urlInput.value.trim());
+        });
+    })();
+</script>
+{% endblock %}

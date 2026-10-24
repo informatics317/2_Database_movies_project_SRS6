@@ -1,0 +1,4 @@
+<div class="poster {{ extra_class }}" role="img" aria-label="Постер фильма {{ movie.title }}"
+     style="{% if movie.poster_src %}background-image: url('{{ movie.poster_src }}');{% else %}background: linear-gradient(135deg, hsl({{ movie.hue }}, 65%, 42%), hsl({{ movie.hue_2 }}, 65%, 26%));{% endif %}">
+    {% if not movie.poster_src %}<span class="poster-title">{{ movie.title }}</span>{% endif %}
+</div>

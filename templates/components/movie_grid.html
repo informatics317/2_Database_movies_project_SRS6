@@ -1,0 +1,9 @@
+{% for movie in movies %}
+    <div class="col-12 col-sm-6 col-lg-4 col-xl-3 movie-col">
+        {% include 'components/movie_card.html' %}
+    </div>
+{% empty %}
+    <div class="col-12">
+        {% include 'components/empty_state.html' with title='Ничего не найдено' text='Измените условия поиска или отметьте фильмы кнопками в каталоге.' %}
+    </div>
+{% endfor %}

@@ -1,0 +1,3 @@
+{% include 'components/mark_button.html' with kind='favorite' active=movie.marked_favorite color='danger' icon='♥' label='В любимые' %}
+{% include 'components/mark_button.html' with kind='watch' active=movie.marked_watch color='primary' icon='🕒' label='Буду смотреть' %}
+{% include 'components/mark_button.html' with kind='watched' active=movie.marked_watched color='success' icon='✔' label='Просмотрено' %}

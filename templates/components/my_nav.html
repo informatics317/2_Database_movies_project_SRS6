@@ -1,0 +1,22 @@
+<ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+        <a class="nav-link {% if kind == 'all' %}active{% endif %}" href="/my/">
+            Все <span class="badge bg-secondary-lt ms-1" data-count="all">{{ counts.all }}</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if kind == 'watch' %}active{% endif %}" href="/my/watch/">
+            Буду смотреть <span class="badge bg-blue-lt ms-1" data-count="watch">{{ counts.watch }}</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if kind == 'favorite' %}active{% endif %}" href="/my/favorite/">
+            Любимые <span class="badge bg-red-lt ms-1" data-count="favorite">{{ counts.favorite }}</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if kind == 'watched' %}active{% endif %}" href="/my/watched/">
+            Просмотрено <span class="badge bg-green-lt ms-1" data-count="watched">{{ counts.watched }}</span>
+        </a>
+    </li>
+</ul>

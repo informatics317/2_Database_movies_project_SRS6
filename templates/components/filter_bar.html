@@ -1,0 +1,20 @@
+<div class="card mb-3 filter-bar">
+    <div class="card-body">
+        <div class="row g-2">
+            <div class="col-12 col-lg-6">
+                <input type="search" class="form-control" id="search-input" autocomplete="off"
+                       placeholder="Поиск по названию или режиссёру">
+            </div>
+            <div class="col-12 col-sm-8 col-lg-4">
+                <select class="form-select" id="sort-select" aria-label="Сортировка">
+                    {% for value, label in sort_options.items %}
+                        <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12 col-sm-4 col-lg-2 d-grid">
+                <button type="button" class="btn btn-outline-secondary" id="reset-filters">Сброс</button>
+            </div>
+        </div>
+    </div>
+</div>

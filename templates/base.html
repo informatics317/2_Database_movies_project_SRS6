@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>{% block title %}Каталог{% endblock %} — Фильмотека</title>
+
+    <link rel="stylesheet" href="{% static 'vendor/tabler/css/tabler.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/movies.css' %}">
+
+    <script>
+        try {
+            var savedTheme = localStorage.getItem('movies.theme');
+            if (savedTheme) { document.documentElement.setAttribute('data-bs-theme', savedTheme); }
+        } catch (e) {}
+    </script>
+</head>
+<body>
+<div class="page">
+
+    {% if user.is_authenticated %}
+        {% include 'components/navbar.html' %}
+    {% endif %}
+
+    <div class="page-wrapper">
+        <div class="page-header d-print-none">
+            <div class="container-xl">
+                {% block header %}{% endblock %}
+            </div>
+        </div>
+
+        <div class="page-body">
+            <div class="container-xl">
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags|default:'info' }}{% endif %} alert-dismissible" role="alert">
+                        {{ message }}
+                        <a href="#" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></a>
+                    </div>
+                {% endfor %}
+
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toast-box" aria-live="polite"></div>
+
+<script src="{% static 'vendor/tabler/js/tabler.min.js' %}"></script>
+<script src="{% static 'js/app.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

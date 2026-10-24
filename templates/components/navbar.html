@@ -1,0 +1,60 @@
+{% with url_name=request.resolver_match.url_name %}
+<header class="navbar navbar-expand-md d-print-none sticky-top">
+    <div class="container-xl">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbar-menu" aria-controls="navbar-menu"
+                aria-expanded="false" aria-label="Открыть меню">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <a class="navbar-brand pe-0 pe-md-3" href="/">🎬 Фильмотека</a>
+
+        <div class="navbar-nav flex-row order-md-last ms-auto align-items-center gap-2">
+            <span class="text-secondary d-none d-lg-inline">
+                {{ user.username }}{% if user.is_staff %} <span class="badge bg-purple-lt">админ</span>{% endif %}
+            </span>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="theme-toggle"
+                    aria-label="Сменить тему оформления">🌙</button>
+            <form method="post" action="/accounts/logout/" class="m-0">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-outline-danger">Выход</button>
+            </form>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-menu">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link {% if url_name == 'catalog' or url_name == 'movie_detail' or url_name == 'search' %}active{% endif %}"
+                       href="/">Каталог</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if url_name == 'workspace' %}active{% endif %}"
+                       href="/workspace/">Подбор и сравнение</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if url_name|slice:':3' == 'my_' %}active{% endif %}"
+                       href="/my/">
+                        Мои фильмы
+                        <span class="badge bg-red-lt ms-1" id="my-count">{{ my_movies_count }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if url_name == 'stats' %}active{% endif %}"
+                       href="/stats/">Статистика</a>
+                </li>
+                {% if user.is_staff %}
+                <li class="nav-item">
+                    <a class="nav-link {% if url_name == 'movie_add' %}active{% endif %}"
+                       href="/movies/add/">Добавить фильм</a>
+                </li>
+                {% endif %}
+                <li class="nav-item d-md-none">
+                    <span class="nav-link text-secondary">Вы вошли как {{ user.username }}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+{% endwith %}
